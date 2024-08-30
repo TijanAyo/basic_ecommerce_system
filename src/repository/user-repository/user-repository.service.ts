@@ -12,7 +12,7 @@ export class UserRepositoryService {
         where: { emailAddress: email },
       });
 
-      if (user) return true;
+      return user;
     } catch (e) {
       console.error(
         `Error in findUserByEmail: Unable to find user with email ${email}`,

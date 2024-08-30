@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export class AppResponse {
   static Ok(data: any | null, message: string) {
     return {
@@ -28,3 +30,17 @@ export const ErrorMessage = {
   SERVICE_UNAVAILABLE: 'SERVICE_UNAVAILABLE',
   VALIDATION_ERROR: 'VALIDATION_ERROR_OCCURRED',
 };
+
+export class ErrorResponseDto {
+  @ApiProperty({ example: 'BAD_REQUEST', description: 'Error code' })
+  error: string;
+
+  @ApiProperty({
+    example: 'An unexpected error has occurred',
+    description: 'Error message',
+  })
+  message: string;
+
+  @ApiProperty({ example: false, description: 'Success flag' })
+  success: boolean;
+}
