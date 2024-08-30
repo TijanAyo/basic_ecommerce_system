@@ -12,3 +12,44 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id           String @id @default(cuid())
+  firstName    String @db.VarChar(50)
+  lastName     String @db.VarChar(50)
+  emailAddress String @db.VarChar(180)
+  password     String
+  role         String @db.VarChar(10)
+
+  products         Product[]
+  approvedProducts Product[] @relation("AdminApprovedProducts")
+
+  isAccountSuspended Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Product {
+  id          String  @id @default(cuid())
+  name        String  @db.VarChar(180)
+  summary     String? @db.VarChar(180)
+  description String  @db.Text()
+
+  quantity Int     @default(0)
+  price    Decimal
+  category String
+  status   String  @default("Pending")
+
+  ownerId      String
+  owner        User    @relation(fields: [ownerId], references: [id])
+  approvedById String?
+  approvedBy   User?   @relation("AdminApprovedProducts", fields: [approvedById], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("products")
+}
