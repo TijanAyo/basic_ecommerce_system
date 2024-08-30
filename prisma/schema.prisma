@@ -17,7 +17,7 @@ model User {
   id           String @id @default(cuid())
   firstName    String @db.VarChar(50)
   lastName     String @db.VarChar(50)
-  emailAddress String @db.VarChar(180)
+  emailAddress String @unique @db.VarChar(180)
   password     String
   role         String @db.VarChar(10)
 
@@ -41,7 +41,7 @@ model Product {
   quantity Int     @default(0)
   price    Decimal
   category String
-  status   String  @default("Pending")
+  status   String  @default("PendingApproval")
 
   ownerId      String
   owner        User    @relation(fields: [ownerId], references: [id])
