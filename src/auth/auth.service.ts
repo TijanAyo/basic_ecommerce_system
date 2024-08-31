@@ -87,7 +87,10 @@ export class AuthService {
         );
       }
 
-      const access_token = await this.jwtService.signAsync({ sub: user.id });
+      const access_token = await this.jwtService.signAsync({
+        sub: user.id,
+        role: user.role,
+      });
 
       return AppResponse.Ok(access_token, 'User successfully authorized');
     } catch (e) {
