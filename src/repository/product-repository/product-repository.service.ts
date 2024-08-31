@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AppResponse, ErrorMessage } from '../../common/helpers';
 import {
@@ -15,20 +11,9 @@ export class ProductRepositoryService {
   constructor(private readonly _prismaService: PrismaService) {}
   async findProductById(productId: string) {
     try {
-      const product = await this._prismaService.product.findUnique({
+      return await this._prismaService.product.findUnique({
         where: { id: productId },
       });
-
-      if (!product) {
-        throw new NotFoundException(
-          AppResponse.Error(
-            `Product with ID: #${productId} not found, check input and try again`,
-            ErrorMessage.NOT_FOUND,
-          ),
-        );
-      }
-
-      return product;
     } catch (e) {
       console.error(
         `Error in findProductById: Unable to find product`,

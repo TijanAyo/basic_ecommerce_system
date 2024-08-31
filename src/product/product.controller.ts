@@ -36,7 +36,7 @@ export class ProductController {
   @Patch('update/:productId')
   async updateProduct(
     @Body() payload: updateProductDto,
-    @Param() productId: string,
+    @Param('productId') productId: string,
     @Req() req: any,
   ) {
     const user = req.user;
@@ -49,5 +49,8 @@ export class ProductController {
 
   @UseGuards(AuthorizeGuard)
   @Delete('delete/:productId')
-  async deleteProduct() {}
+  async deleteProduct(@Param('productId') productId: string, @Req() req: any) {
+    const user = req.user;
+    return await this._productService.deleteProduct(productId, user.sub);
+  }
 }

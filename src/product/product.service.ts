@@ -76,6 +76,7 @@ export class ProductService {
       }
 
       const sanitizedData = _.pick(createNewProduct, [
+        'id',
         'name',
         'summary',
         'description',
@@ -109,16 +110,16 @@ export class ProductService {
       const productExist =
         await this._productRepository.findProductById(productId);
 
-      /* if (!productExist) {
+      if (!productExist) {
         throw new NotFoundException(
           AppResponse.Error(
             `Product with ID: #${productId} not found, check input and try again`,
             ErrorMessage.NOT_FOUND,
           ),
         );
-      } */
+      }
 
-      if (productExist.ownerId === userId) {
+      if (productExist.ownerId !== userId) {
         throw new UnauthorizedException(
           AppResponse.Error(
             `You are not authorized to make this change`,
@@ -132,8 +133,20 @@ export class ProductService {
         productId,
       );
 
+      const sanitizedData = _.pick(modifiedProduct, [
+        'id',
+        'name',
+        'summary',
+        'description',
+        'price',
+        'quantity',
+        'category',
+        'updatedAt',
+        'createdAt',
+      ]);
+
       return AppResponse.Ok(
-        modifiedProduct,
+        sanitizedData,
         `Product has been updated successfully`,
       );
     } catch (e) {
@@ -160,7 +173,7 @@ export class ProductService {
         );
       }
 
-      if (productExist.ownerId === userId) {
+      if (productExist.ownerId !== userId) {
         throw new UnauthorizedException(
           AppResponse.Error(
             `You are not authorized to make this change`,
@@ -172,7 +185,19 @@ export class ProductService {
       const deleteProduct =
         await this._productRepository.discardProduct(productId);
 
-      return AppResponse.Ok(deleteProduct, `Product deleted successfully`);
+      const sanitizedData = _.pick(deleteProduct, [
+        'id',
+        'name',
+        'summary',
+        'description',
+        'price',
+        'quantity',
+        'category',
+        'updatedAt',
+        'createdAt',
+      ]);
+
+      return AppResponse.Ok(sanitizedData, `Product deleted successfully`);
     } catch (e) {
       console.error(
         `Error in deleteProduct: Unable to delete product`,
