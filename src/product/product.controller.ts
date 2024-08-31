@@ -10,9 +10,15 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
-import { createProductDto, updateProductDto } from './dtos';
+import {
+  createProductDto,
+  updateProductDto,
+  updateProductStatusDto,
+} from './dtos';
 import { ApiTags } from '@nestjs/swagger';
-import { AuthorizeGuard } from '../common/guards';
+import { AuthorizeGuard, RolesGuard } from '../common/guards';
+import { Roles } from '../common/decorators';
+import { roles } from '../common/interfaces';
 
 @ApiTags('Products')
 @Controller('product')
@@ -23,6 +29,11 @@ export class ProductController {
   async viewAllProducts(@Req() req: any) {
     const { page = 1, pageSize = 10 } = req.query;
     return await this._productService.viewAllProducts(page, pageSize);
+  }
+
+  @Get('view/:productId')
+  async viewProductDetails(@Param('productId') productId) {
+    return await this._productService.viewProductDetails(productId);
   }
 
   @UseGuards(AuthorizeGuard)
@@ -52,5 +63,21 @@ export class ProductController {
   async deleteProduct(@Param('productId') productId: string, @Req() req: any) {
     const user = req.user;
     return await this._productService.deleteProduct(productId, user.sub);
+  }
+
+  @UseGuards(AuthorizeGuard, RolesGuard)
+  @Roles(roles.admin)
+  @Patch('/:productId/approve-or-disapprove')
+  async updateProductStatus(
+    @Param('productId') productId: string,
+    @Body() payload: updateProductStatusDto,
+    @Req() req: any,
+  ) {
+    const user = req.user;
+    return await this._productService.updateProductStatus(
+      payload,
+      productId,
+      user.sub,
+    );
   }
 }

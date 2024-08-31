@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Roles } from '../../common/interfaces';
+import { roles } from '../../common/interfaces';
 import { AppResponse, ErrorMessage } from 'src/common/helpers';
 @Injectable()
 export class UserRepositoryService {
@@ -40,7 +40,7 @@ export class UserRepositoryService {
           emailAddress: email,
           firstName,
           lastName,
-          role: Roles.user,
+          role: roles.user,
           password,
         },
       });

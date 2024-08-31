@@ -9,6 +9,7 @@ import { AppResponse, ErrorMessage } from '../common/helpers';
 import {
   createProductPayload,
   updateProductPayload,
+  updateProductStatusPayload,
 } from '../common/interfaces';
 import * as _ from 'lodash';
 
@@ -51,6 +52,48 @@ export class ProductService {
     } catch (e) {
       console.error(
         `Error in viewAllProducts: Unable to fetch products`,
+        e.message,
+        e.stack,
+      );
+      throw e;
+    }
+  }
+
+  async viewProductDetails(productId: string) {
+    try {
+      const productExist =
+        await this._productRepository.findProductById(productId);
+
+      if (!productExist) {
+        throw new NotFoundException(
+          AppResponse.Error(
+            `Product with ID: #${productId} not found, check input and try again`,
+            ErrorMessage.NOT_FOUND,
+          ),
+        );
+      }
+
+      const sanitizedData = _.pick(productExist, [
+        'id',
+        'name',
+        'summary',
+        'description',
+        'price',
+        'quantity',
+        'category',
+        'status',
+        'ownerId',
+        'updatedAt',
+        'createdAt',
+      ]);
+
+      return AppResponse.Ok(
+        sanitizedData,
+        `Fetched product information successfully`,
+      );
+    } catch (e) {
+      console.error(
+        `Error in viewProductDetails: Unable to view product details`,
         e.message,
         e.stack,
       );
@@ -208,6 +251,41 @@ export class ProductService {
     }
   }
 
-  // approve product
-  // disapprove product
+  async updateProductStatus(
+    payload: updateProductStatusPayload,
+    productId: string,
+    userId: string,
+  ) {
+    try {
+      const productExist =
+        await this._productRepository.findProductById(productId);
+
+      if (!productExist) {
+        throw new NotFoundException(
+          AppResponse.Error(
+            `Product with ID: #${productId} not found, check input and try again`,
+            ErrorMessage.NOT_FOUND,
+          ),
+        );
+      }
+
+      await this._productRepository.modifyProductApproval(
+        payload,
+        productId,
+        userId,
+      );
+
+      return AppResponse.Ok(
+        null,
+        `Product status has been updated successfully`,
+      );
+    } catch (e) {
+      console.error(
+        `Error in updateProductApprovalStatus: Unable to update product status`,
+        e.message,
+        e.stack,
+      );
+      throw e;
+    }
+  }
 }

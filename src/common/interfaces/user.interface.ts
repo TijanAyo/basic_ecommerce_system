@@ -10,7 +10,7 @@ export interface loginPayload {
   password: string;
 }
 
-export enum Roles {
+export enum roles {
   user = 'User',
   admin = 'Admin',
 }

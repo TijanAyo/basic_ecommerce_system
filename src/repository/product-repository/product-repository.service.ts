@@ -4,6 +4,7 @@ import { AppResponse, ErrorMessage } from '../../common/helpers';
 import {
   createProductPayload,
   updateProductPayload,
+  updateProductStatusPayload,
 } from '../../common/interfaces';
 
 @Injectable()
@@ -130,6 +131,34 @@ export class ProductRepositoryService {
     } catch (e) {
       console.error(
         `Error in discardProduct: Unable to discard product`,
+        e.message,
+        e.stack,
+      );
+      throw new InternalServerErrorException(
+        AppResponse.Error(
+          `An unexpected error has occurred`,
+          ErrorMessage.INTERNAL_SERVER_ERROR,
+        ),
+      );
+    }
+  }
+
+  async modifyProductApproval(
+    payload: updateProductStatusPayload,
+    productId: string,
+    userId: string,
+  ) {
+    try {
+      return await this._prismaService.product.update({
+        where: { id: productId },
+        data: {
+          status: payload.action,
+          approvedById: userId,
+        },
+      });
+    } catch (e) {
+      console.error(
+        `Error in modifyProductApproval: Unable to modify product status`,
         e.message,
         e.stack,
       );

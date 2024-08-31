@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString, MaxLength } from 'class-validator';
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MaxLength,
+} from 'class-validator';
+import { ProductAction } from '../../common/interfaces';
 
 export class updateProductDto {
   @IsOptional()
@@ -33,4 +40,13 @@ export class updateProductDto {
   @IsOptional()
   @ApiProperty()
   category: string;
+}
+
+export class updateProductStatusDto {
+  @IsString()
+  @IsEnum(ProductAction, {
+    message: 'action must be either Approve or Disapprove',
+  })
+  @ApiProperty({ enum: ProductAction })
+  action: ProductAction;
 }

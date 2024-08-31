@@ -15,3 +15,12 @@ export interface updateProductPayload {
   price?: number;
   category?: string;
 }
+
+export enum ProductAction {
+  APPROVE = 'Approve',
+  DISAPPROVE = 'Disapprove',
+}
+
+export interface updateProductStatusPayload {
+  action: ProductAction;
+}
