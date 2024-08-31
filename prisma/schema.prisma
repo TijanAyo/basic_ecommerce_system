@@ -39,7 +39,7 @@ model Product {
   description String  @db.Text()
 
   quantity Int     @default(0)
-  price    Decimal
+  price    Decimal @db.Decimal(10, 2)
   category String? @default("Uncategorized") @db.VarChar(50)
   status   String  @default("PendingApproval")
 

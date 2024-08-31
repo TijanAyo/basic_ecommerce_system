@@ -69,7 +69,7 @@ export class ProductRepositoryService {
           summary: payload.summary ?? undefined,
           description: payload.description ?? undefined,
           quantity: payload.quantity,
-          price: payload.price,
+          price: payload.price.toFixed(2),
           category: payload.category ?? undefined,
           ownerId: userId,
         },
