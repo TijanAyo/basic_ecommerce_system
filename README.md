@@ -1,73 +1,66 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# E-Commerce System API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Project Overview
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+The application is a simple e-commerce system with the following functionalities:
 
-## Description
+- ### User Management
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+  - User registration and authentication.
+  - Admin privileges for user management (approve/disapprove products, ban/unban users).
+  - Role-based access control for users and admins.
 
-## Installation
+- ### Product Management
+  - Authenticated users can manage their own products (create, update, delete).
+  - Only approved products are visible to unauthenticated users.
 
-```bash
-$ yarn install
-```
+## Development Environment Setup
 
-## Running the app
+1. Clone the repository
 
-```bash
-# development
-$ yarn run start
+   ```bash
+    git clone https://github.com/TijanAyo/basic_ecommerce_system.git
+    cd ecommerce-system
+   ```
 
-# watch mode
-$ yarn run start:dev
+2. Install project dependencies
 
-# production mode
-$ yarn run start:prod
-```
+   ```bash
+   npm install
+   or
+   yarn install
+   ```
 
-## Test
+3. Set up environmental variables: Create a .env file in the root directory of the project and set up your environment variables.
 
-```bash
-# unit tests
-$ yarn run test
+   ```bash
+    # In the root of your application
+    touch .env
 
-# e2e tests
-$ yarn run test:e2e
+    # The above command will create a .env file
+    # Make use of the .env.example as reference
+   ```
 
-# test coverage
-$ yarn run test:cov
-```
+   ```bash
+    DATABASE_URL=postgresql://user:password@localhost:5432/ecommerce_db
+    JWT_SECRET=your_jwt_secret
+    PORT=3000
+   ```
 
-## Support
+   Note: To get a `DATABASE_URL`, you can check out platforms like [Neon](neon.tech), [Render](render.com), or [Aiven](aiven.io) to get access to a free relational database.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+4. Run migration: Ensure the database schema is up-to-date by running migrations
+   ```bash
+    npx prisma migrate deploy
+   ```
 
-## Stay in touch
+## Running the Application Locally
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+1. Start the development server: To start the application in development mode, run
+   ```bash
+   npm run start:dev
+   ```
+   or
+   ```bash
+   yarn start:dev
+   ```
