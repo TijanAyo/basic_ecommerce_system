@@ -64,3 +64,11 @@ The application is a simple e-commerce system with the following functionalities
    ```bash
    yarn start:dev
    ```
+
+## API Documentation
+
+To explore and interact with the API, please refer to the Swagger documentation available at
+
+```bash
+   http://localhost:3000/api-doc
+```
