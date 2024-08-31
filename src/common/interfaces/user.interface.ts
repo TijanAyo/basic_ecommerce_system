@@ -14,3 +14,12 @@ export enum roles {
   user = 'User',
   admin = 'Admin',
 }
+
+export enum UserAction {
+  BAN = 'BAN',
+  UNBAN = 'UNBAN',
+}
+
+export interface updateUserRestrictionPayload {
+  action: UserAction;
+}
