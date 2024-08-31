@@ -4,13 +4,20 @@ import { Roles } from '../common/decorators';
 import { AccountGuard, AuthorizeGuard, RolesGuard } from '../common/guards';
 import { roles } from '../common/interfaces';
 import { modifyUserStatusDto } from './dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ErrorResponseDto } from '../common/helpers';
 
 @ApiTags('Users')
 @Controller('user')
 export class UserController {
   constructor(private readonly _userService: UserService) {}
 
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request',
+    type: ErrorResponseDto,
+  })
+  @ApiOperation({ summary: 'Ban or Unban user accounts - Admin Functionality' })
   @UseGuards(AuthorizeGuard, AccountGuard, RolesGuard)
   @Roles(roles.admin)
   @Patch('/:userId/ban-or-unban')

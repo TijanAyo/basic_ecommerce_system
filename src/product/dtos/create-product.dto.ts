@@ -46,9 +46,11 @@ export class createProductResponseDto {
   @ApiProperty({ example: true })
   status: string;
 
-  @ApiProperty({ example: 'Product create successfully and awaiting approval' })
+  @ApiProperty({
+    example: 'Product created successfully and awaiting approval',
+  })
   message: string;
 
   @ApiProperty({ example: null, nullable: true })
-  data: any;
+  data: createProductDto;
 }
