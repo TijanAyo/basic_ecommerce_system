@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { UserRepositoryService } from '../repository/user-repository/user-repository.service';
 import { loginPayload, registerPayload } from '../common/interfaces';
 import * as bcrypt from 'bcrypt';
@@ -73,6 +77,15 @@ export class AuthService {
         );
       }
 
+      if (user.isAccountSuspended) {
+        throw new ForbiddenException(
+          AppResponse.Error(
+            `This account has been suspended, kindly contact support for assitance`,
+            ErrorMessage.FORBIDDEN,
+          ),
+        );
+      }
+
       const dehashPassword = await bcrypt.compare(
         payload.password,
         user.password,
@@ -90,6 +103,7 @@ export class AuthService {
       const access_token = await this.jwtService.signAsync({
         sub: user.id,
         role: user.role,
+        isAccountSuspended: user.isAccountSuspended,
       });
 
       return AppResponse.Ok(access_token, 'User successfully authorized');

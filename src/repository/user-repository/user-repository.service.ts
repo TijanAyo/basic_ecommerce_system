@@ -87,6 +87,7 @@ export class UserRepositoryService {
   ) {
     try {
       const action = payload.action === 'BAN' ? true : false;
+
       return await this._prismaService.user.update({
         where: { id: userId },
         data: {

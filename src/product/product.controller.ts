@@ -16,7 +16,7 @@ import {
   updateProductStatusDto,
 } from './dtos';
 import { ApiTags } from '@nestjs/swagger';
-import { AuthorizeGuard, RolesGuard } from '../common/guards';
+import { AccountGuard, AuthorizeGuard, RolesGuard } from '../common/guards';
 import { Roles } from '../common/decorators';
 import { roles } from '../common/interfaces';
 
@@ -36,14 +36,14 @@ export class ProductController {
     return await this._productService.viewProductDetails(productId);
   }
 
-  @UseGuards(AuthorizeGuard)
+  @UseGuards(AuthorizeGuard, AccountGuard)
   @Post('new')
   async createProduct(@Body() payload: createProductDto, @Req() req: any) {
     const user = req.user;
     return await this._productService.createProduct(payload, user.sub);
   }
 
-  @UseGuards(AuthorizeGuard)
+  @UseGuards(AuthorizeGuard, AccountGuard)
   @Patch('update/:productId')
   async updateProduct(
     @Body() payload: updateProductDto,
@@ -58,14 +58,14 @@ export class ProductController {
     );
   }
 
-  @UseGuards(AuthorizeGuard)
+  @UseGuards(AuthorizeGuard, AccountGuard)
   @Delete('delete/:productId')
   async deleteProduct(@Param('productId') productId: string, @Req() req: any) {
     const user = req.user;
     return await this._productService.deleteProduct(productId, user.sub);
   }
 
-  @UseGuards(AuthorizeGuard, RolesGuard)
+  @UseGuards(AuthorizeGuard, AccountGuard, RolesGuard)
   @Roles(roles.admin)
   @Patch('/:productId/approve-or-disapprove')
   async updateProductStatus(
