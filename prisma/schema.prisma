@@ -40,7 +40,7 @@ model Product {
 
   quantity Int     @default(0)
   price    Decimal
-  category String
+  category String? @default("Uncategorized") @db.VarChar(50)
   status   String  @default("PendingApproval")
 
   ownerId      String
