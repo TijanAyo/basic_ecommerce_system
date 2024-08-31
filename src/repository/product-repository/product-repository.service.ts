@@ -3,6 +3,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { AppResponse, ErrorMessage } from '../../common/helpers';
 import {
   createProductPayload,
+  ProductAction,
   updateProductPayload,
   updateProductStatusPayload,
 } from '../../common/interfaces';
@@ -39,10 +40,11 @@ export class ProductRepositoryService {
       const products = await this._prismaService.product.findMany({
         skip,
         take: size,
+        where: { status: ProductAction.APPROVE },
       });
 
       const totalUsers = await this._prismaService.product.count({
-        where: { status: 'PendingApproval' },
+        where: { status: ProductAction.APPROVE },
       });
       const totalPages = Math.ceil(totalUsers / size);
 
